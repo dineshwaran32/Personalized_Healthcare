@@ -23,17 +23,11 @@ const Header = () => {
             <Link to="/diet-plans" className="text-gray-700 hover:text-teal-600">Diet Plans</Link>
             <div className="flex items-center space-x-4">
               <button
-                onClick={() => navigate('/login')}
-                className="px-4 py-2 text-teal-600 hover:text-teal-700"
-              >
-                Login
-              </button>
-              <button
                 onClick={() => navigate('/signup')}
                 className="flex items-center px-4 py-2 bg-teal-600 text-white rounded-lg hover:bg-teal-700"
               >
                 <User className="w-4 h-4 mr-2" />
-                Sign Up
+                Login
               </button>
             </div>
           </div>
@@ -57,17 +51,11 @@ const Header = () => {
               <Link to="/diet-plans" className="text-gray-700 hover:text-teal-600">Diet Plans</Link>
               <div className="flex flex-col space-y-2">
                 <button
-                  onClick={() => navigate('/login')}
-                  className="px-4 py-2 text-teal-600 hover:text-teal-700"
-                >
-                  Login
-                </button>
-                <button
                   onClick={() => navigate('/signup')}
                   className="flex items-center px-4 py-2 bg-teal-600 text-white rounded-lg hover:bg-teal-700"
                 >
                   <User className="w-4 h-4 mr-2" />
-                  Sign Up
+                  Login
                 </button>
               </div>
             </div>

@@ -1,5 +1,50 @@
 import React, { useState } from 'react';
-import { Star, Clock, Video, Calendar, Search, Filter, MapPin, Shield, Award } from 'lucide-react';
+import { Star, Clock, Video, Calendar, Search, MapPin, Shield, Award } from 'lucide-react';
+
+const doctors = [
+  {
+    name: 'Dr. Sarah Johnson',
+    specialty: 'Cardiologist',
+    rating: 4.9,
+    experience: '15 years',
+    image: 'https://images.unsplash.com/photo-1559839734-2b71ea197ec2?ixlib=rb-1.2.1&auto=format&fit=crop&w=300&q=80',
+    availability: 'Available Today',
+    location: 'New York, NY',
+    languages: ['English', 'Spanish'],
+    certifications: ['American Board of Cardiology', 'Fellow of Cardiology'],
+    nextAvailable: '2:30 PM Today',
+    consultationFee: '$150'
+  },
+  {
+    name: 'Dr. Michael Chen',
+    specialty: 'Nutritionist',
+    rating: 4.8,
+    experience: '10 years',
+    image: 'https://images.unsplash.com/photo-1612349317150-e413f6a5b16d?ixlib=rb-1.2.1&auto=format&fit=crop&w=300&q=80',
+    availability: 'Next Available: Tomorrow',
+    location: 'Los Angeles, CA',
+    languages: ['English', 'Mandarin'],
+    certifications: ['Certified Nutrition Specialist', 'Sports Nutrition Expert'],
+    nextAvailable: '10:00 AM Tomorrow',
+    consultationFee: '$100'
+  },
+  {
+    name: 'Dr. Emily Rodriguez',
+    specialty: 'Physical Therapist',
+    rating: 4.7,
+    experience: '12 years',
+    image: 'https://images.unsplash.com/photo-1594824476967-48c8b964273f?ixlib=rb-1.2.1&auto=format&fit=crop&w=300&q=80',
+    availability: 'Available Today',
+    location: 'Chicago, IL',
+    languages: ['English', 'Portuguese'],
+    certifications: ['Doctor of Physical Therapy', 'Sports Therapy Certified'],
+    nextAvailable: '4:00 PM Today',
+    consultationFee: '$120'
+  }
+];
+
+const specialties = ['All Specialties', 'Cardiologist', 'Nutritionist', 'Physical Therapist', 'Dermatologist', 'Psychologist'];
+const locations = ['All Locations', 'New York, NY', 'Los Angeles, CA', 'Chicago, IL', 'Houston, TX'];
 
 const ExpertCare = () => {
   const [searchTerm, setSearchTerm] = useState('');
@@ -8,54 +53,9 @@ const ExpertCare = () => {
   const [showBookingModal, setShowBookingModal] = useState(false);
   const [selectedDoctor, setSelectedDoctor] = useState(null);
 
-  const doctors = [
-    {
-      name: 'Dr. Sarah Johnson',
-      specialty: 'Cardiologist',
-      rating: 4.9,
-      experience: '15 years',
-      image: 'https://images.unsplash.com/photo-1559839734-2b71ea197ec2?ixlib=rb-1.2.1&auto=format&fit=crop&w=300&q=80',
-      availability: 'Available Today',
-      location: 'New York, NY',
-      languages: ['English', 'Spanish'],
-      certifications: ['American Board of Cardiology', 'Fellow of Cardiology'],
-      nextAvailable: '2:30 PM Today',
-      consultationFee: '$150',
-    },
-    {
-      name: 'Dr. Michael Chen',
-      specialty: 'Nutritionist',
-      rating: 4.8,
-      experience: '10 years',
-      image: 'https://images.unsplash.com/photo-1612349317150-e413f6a5b16d?ixlib=rb-1.2.1&auto=format&fit=crop&w=300&q=80',
-      availability: 'Next Available: Tomorrow',
-      location: 'Los Angeles, CA',
-      languages: ['English', 'Mandarin'],
-      certifications: ['Certified Nutrition Specialist', 'Sports Nutrition Expert'],
-      nextAvailable: '10:00 AM Tomorrow',
-      consultationFee: '$100',
-    },
-    {
-      name: 'Dr. Emily Rodriguez',
-      specialty: 'Physical Therapist',
-      rating: 4.7,
-      experience: '12 years',
-      image: 'https://images.unsplash.com/photo-1594824476967-48c8b964273f?ixlib=rb-1.2.1&auto=format&fit=crop&w=300&q=80',
-      availability: 'Available Today',
-      location: 'Chicago, IL',
-      languages: ['English', 'Portuguese'],
-      certifications: ['Doctor of Physical Therapy', 'Sports Therapy Certified'],
-      nextAvailable: '4:00 PM Today',
-      consultationFee: '$120',
-    },
-  ];
-
-  const specialties = ['All Specialties', 'Cardiologist', 'Nutritionist', 'Physical Therapist', 'Dermatologist', 'Psychologist'];
-  const locations = ['All Locations', 'New York, NY', 'Los Angeles, CA', 'Chicago, IL', 'Houston, TX'];
-
-  const filteredDoctors = doctors.filter((doctor) => {
+  const filteredDoctors = doctors.filter(doctor => {
     const matchesSearch = doctor.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      doctor.specialty.toLowerCase().includes(searchTerm.toLowerCase());
+                         doctor.specialty.toLowerCase().includes(searchTerm.toLowerCase());
     const matchesSpecialty = selectedSpecialty === 'All Specialties' || doctor.specialty === selectedSpecialty;
     const matchesLocation = selectedLocation === 'All Locations' || doctor.location === selectedLocation;
     return matchesSearch && matchesSpecialty && matchesLocation;
@@ -92,10 +92,8 @@ const ExpertCare = () => {
               value={selectedSpecialty}
               onChange={(e) => setSelectedSpecialty(e.target.value)}
             >
-              {specialties.map((specialty) => (
-                <option key={specialty} value={specialty}>
-                  {specialty}
-                </option>
+              {specialties.map(specialty => (
+                <option key={specialty} value={specialty}>{specialty}</option>
               ))}
             </select>
             <select
@@ -103,10 +101,8 @@ const ExpertCare = () => {
               value={selectedLocation}
               onChange={(e) => setSelectedLocation(e.target.value)}
             >
-              {locations.map((location) => (
-                <option key={location} value={location}>
-                  {location}
-                </option>
+              {locations.map(location => (
+                <option key={location} value={location}>{location}</option>
               ))}
             </select>
           </div>
@@ -117,7 +113,11 @@ const ExpertCare = () => {
           {filteredDoctors.map((doctor, index) => (
             <div key={index} className="bg-white rounded-xl shadow-sm overflow-hidden hover:shadow-md transition-all">
               <div className="relative h-48">
-                <img src={doctor.image} alt={doctor.name} className="w-full h-full object-cover" />
+                <img
+                  src={doctor.image}
+                  alt={doctor.name}
+                  className="w-full h-full object-cover"
+                />
                 <div className="absolute top-4 right-4 bg-white px-3 py-1 rounded-full text-sm font-medium text-teal-600">
                   {doctor.availability}
                 </div>
@@ -128,7 +128,7 @@ const ExpertCare = () => {
                   <Award className="w-4 h-4 text-teal-600 mr-2" />
                   <p className="text-gray-600">{doctor.specialty}</p>
                 </div>
-
+                
                 <div className="flex items-center mb-4">
                   <Star className="w-5 h-5 text-yellow-400" />
                   <span className="ml-2 text-gray-700">{doctor.rating}</span>
@@ -187,11 +187,18 @@ const ExpertCare = () => {
               <h3 className="text-xl font-semibold mb-4">Book Appointment with {selectedDoctor.name}</h3>
               <div className="space-y-4">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Select Date</label>
-                  <input type="date" className="w-full p-2 border border-gray-300 rounded-lg" />
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    Select Date
+                  </label>
+                  <input
+                    type="date"
+                    className="w-full p-2 border border-gray-300 rounded-lg"
+                  />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Select Time</label>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    Select Time
+                  </label>
                   <select className="w-full p-2 border border-gray-300 rounded-lg">
                     <option>9:00 AM</option>
                     <option>10:00 AM</option>
@@ -201,7 +208,9 @@ const ExpertCare = () => {
                   </select>
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Consultation Type</label>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    Consultation Type
+                  </label>
                   <select className="w-full p-2 border border-gray-300 rounded-lg">
                     <option>Video Call</option>
                     <option>Voice Call</option>
@@ -209,7 +218,9 @@ const ExpertCare = () => {
                   </select>
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Notes (Optional)</label>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    Notes (Optional)
+                  </label>
                   <textarea
                     className="w-full p-2 border border-gray-300 rounded-lg"
                     rows={3}
@@ -226,7 +237,7 @@ const ExpertCare = () => {
                 </button>
                 <button
                   onClick={() => {
-                    // Handle booking confirmation
+
                     setShowBookingModal(false);
                   }}
                   className="flex-1 px-4 py-2 bg-teal-600 text-white rounded-lg hover:bg-teal-700"
