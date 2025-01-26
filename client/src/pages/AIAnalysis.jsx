@@ -42,6 +42,15 @@ const AIAnalysis = () => {
     },
   ];
 
+
+
+  const handleAnalyze = async () => {
+    const data = {
+      heartRate: 75,
+      steps: 8000,
+      calories: 2300,
+    };}
+  
   return (
     <div className="pt-20 min-h-screen bg-gray-50">
       <div className="container mx-auto px-6 py-8">
@@ -53,6 +62,8 @@ const AIAnalysis = () => {
             Personalized health recommendations powered by AI
           </p>
         </div>
+
+        
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
           {insights.map((insight, index) => (
@@ -98,8 +109,18 @@ const AIAnalysis = () => {
           ))}
         </div>
 
+        <div className="mt-8 text-center">
+              <button
+                  onClick={handleAnalyze}
+                  className="inline-flex items-center px-6 py-3 bg-teal-600 text-white rounded-lg hover:bg-teal-700 transition-colors"
+                >
+                  Analyze Your Health Data
+              </button>
+            </div>
+
+
         {/* Learn More Section */}
-        <div className="bg-white rounded-xl shadow-sm p-8 mb-8">
+        <div className="bg-white rounded-xl shadow-sm p-8 mb-8 mt-8">
           <div className="max-w-3xl mx-auto">
             <h2 className="text-2xl font-bold text-gray-900 mb-4">
               How Our AI Works
