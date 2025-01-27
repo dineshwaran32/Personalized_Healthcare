@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Utensils, Clock, Download, ChevronRight, Filter, Search, Star, Calendar, ShoppingCart } from 'lucide-react';
-import mealPlansData from '../../mealPlans.json';
+import mealPlansData from '../../data/mealPlans.json';
 
 const DietPlans = () => {
   const [searchTerm, setSearchTerm] = useState('');
