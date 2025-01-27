@@ -1,101 +1,12 @@
 import React, { useState } from 'react';
 import { Utensils, Clock, Download, ChevronRight, Filter, Search, Star, Calendar, ShoppingCart } from 'lucide-react';
+import mealPlans from '../../mealPlans.json';
 
 const DietPlans = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedTags, setSelectedTags] = useState([]);
   const [selectedPlan, setSelectedPlan] = useState(null);
   const [showModal, setShowModal] = useState(false);
-
-  const mealPlans = [
-    {
-      title: 'Weight Loss Plan',
-      calories: '1800-2000',
-      duration: '4 weeks',
-      image: 'https://images.unsplash.com/photo-1490645935967-10de6ba17061?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80',
-      meals: ['Breakfast', 'Lunch', 'Dinner', '2 Snacks'],
-      features: ['Personalized portions', 'Grocery lists', 'Recipe instructions', 'Weekly check-ins', 'Nutrition coaching'],
-      tags: ['Low Carb', 'High Protein', 'Gluten Free'],
-      rating: 4.8,
-      reviews: 128,
-      price: '$49.99/month',
-      description: 'A scientifically designed meal plan to help you achieve sustainable weight loss while maintaining energy and satisfaction.',
-      nutritionInfo: {
-        protein: '25%',
-        carbs: '45%',
-        fats: '30%',
-        fiber: '25g/day',
-      },
-      sampleMenu: [
-        {
-          day: 'Monday',
-          meals: [
-            { type: 'Breakfast', name: 'Greek Yogurt Parfait', calories: '300' },
-            { type: 'Lunch', name: 'Grilled Chicken Salad', calories: '400' },
-            { type: 'Dinner', name: 'Baked Salmon with Quinoa', calories: '500' },
-          ],
-        },
-      ],
-    },
-    {
-      title: 'Muscle Gain Plan',
-      calories: '2500-2800',
-      duration: '6 weeks',
-      image: 'https://images.unsplash.com/photo-1547496502-affa22d38842?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80',
-      meals: ['Breakfast', 'Lunch', 'Dinner', '3 Snacks'],
-      features: ['High protein meals', 'Supplement guide', 'Workout nutrition', 'Progress tracking', 'Expert support'],
-      tags: ['High Protein', 'Mass Gain', 'Performance'],
-      rating: 4.9,
-      reviews: 95,
-      price: '$59.99/month',
-      description: 'Optimized nutrition plan for muscle growth and strength gains, perfectly timed with your workout schedule.',
-      nutritionInfo: {
-        protein: '35%',
-        carbs: '50%',
-        fats: '15%',
-        fiber: '30g/day',
-      },
-      sampleMenu: [
-        {
-          day: 'Monday',
-          meals: [
-            { type: 'Breakfast', name: 'Protein Oatmeal Bowl', calories: '450' },
-            { type: 'Lunch', name: 'Turkey Rice Bowl', calories: '650' },
-            { type: 'Dinner', name: 'Steak with Sweet Potato', calories: '750' },
-          ],
-        },
-      ],
-    },
-    {
-      title: 'Balanced Nutrition',
-      calories: '2000-2200',
-      duration: 'Ongoing',
-      image: 'https://images.unsplash.com/photo-1512621776951-a57141f2eefd?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80',
-      meals: ['Breakfast', 'Lunch', 'Dinner', '2 Snacks'],
-      features: ['Balanced macros', 'Vegetarian options', 'Flexible meals', 'Recipe variety', 'Seasonal menus'],
-      tags: ['Balanced', 'Vegetarian', 'Flexible'],
-      rating: 4.7,
-      reviews: 156,
-      price: '$39.99/month',
-      description: 'A well-rounded meal plan that provides optimal nutrition while maintaining flexibility for your lifestyle.',
-      nutritionInfo: {
-        protein: '20%',
-        carbs: '55%',
-        fats: '25%',
-        fiber: '28g/day',
-      },
-      sampleMenu: [
-        {
-          day: 'Monday',
-          meals: [
-            { type: 'Breakfast', name: 'Avocado Toast', calories: '350' },
-            { type: 'Lunch', name: 'Buddha Bowl', calories: '450' },
-            { type: 'Dinner', name: 'Vegetable Stir-Fry', calories: '400' },
-          ],
-        },
-      ],
-    },
-  ];
 
   const allTags = Array.from(new Set(mealPlans.flatMap((plan) => plan.tags)));
 
