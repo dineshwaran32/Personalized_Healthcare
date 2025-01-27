@@ -1,12 +1,14 @@
 import React, { useState } from 'react';
 import { Utensils, Clock, Download, ChevronRight, Filter, Search, Star, Calendar, ShoppingCart } from 'lucide-react';
-import mealPlans from '../../mealPlans.json';
+import mealPlansData from '../../mealPlans.json';
 
 const DietPlans = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedTags, setSelectedTags] = useState([]);
   const [selectedPlan, setSelectedPlan] = useState(null);
   const [showModal, setShowModal] = useState(false);
+
+  const mealPlans = mealPlansData.slice(0,40);
 
   const allTags = Array.from(new Set(mealPlans.flatMap((plan) => plan.tags)));
 
