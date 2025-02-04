@@ -11,10 +11,27 @@ const AuthPage = () => {
     confirmPassword: "",
   });
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("Form submitted:", formData);
+    const url = isLogin ? "/api/auth/login" : "/api/auth/signup";
+  
+    try {
+      const response = await fetch(`http://localhost:5000${url}`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(formData),
+      });
+  
+      const data = await response.json();
+      if (!response.ok) throw new Error(data.message || "Something went wrong");
+  
+      localStorage.setItem("token", data.token);
+      console.log("User authenticated:", data.user);
+    } catch (error) {
+      console.error(error.message);
+    }
   };
+  
 
   const handleChange = (e) => {
     setFormData({

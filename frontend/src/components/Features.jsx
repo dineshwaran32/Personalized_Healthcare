@@ -52,7 +52,7 @@ const Features = () => {
           React.createElement(
             'div',
             {
-              key: index,
+              key : index,
               className: 'bg-white p-8 rounded-xl shadow-sm hover:shadow-md transition-all duration-300 transform hover:-translate-y-2 card-hover hover-trigger',
               style: { animationDelay: `${index * 100}ms` }
             },
