@@ -1,3 +1,4 @@
+const model = require("./models/userModel")
 const express = require("express");
 const mongoose = require("mongoose");
 const bcrypt = require("bcryptjs");
@@ -12,34 +13,17 @@ const JWT_SECRET = process.env.JWT_SECRET;
 
 app.use(express.json());
 
-// Connect to MongoDB
 mongoose.connect(MONGO_URL, { useNewUrlParser: true, useUnifiedTopology: true })
   .then(() => console.log("MongoDB connected"))
   .catch(err => console.error("MongoDB error:", err));
 
-// User Model
-const UserSchema = new mongoose.Schema({
-  name: String,
-  email: String,
-  password: String,
-});
-const User = mongoose.model("User", UserSchema);
+
+const User = model;
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
-app.get("/" ,(req,res) =>{
-  res.send("Hello");
-});
 
-
-app.post("/test", (req, res) => {
-  const { name, password } = req.body;
-  console.log(req.body);
-  console.log("Received Data:", { name, password });
-
-  res.json({ message: "Data received successfully", receivedData: { name, password } });
-});
 
 
 // Signup Route
