@@ -3,7 +3,7 @@ const mongoose = require("mongoose");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const dotenv = require("dotenv");
-
+const bodyParser = require("body-parser");
 dotenv.config();
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -25,11 +25,23 @@ const UserSchema = new mongoose.Schema({
 });
 const User = mongoose.model("User", UserSchema);
 
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
 
-
-app.post("/" ,(req,res) =>{
+app.get("/" ,(req,res) =>{
   res.send("Hello");
 });
+
+
+app.post("/test", (req, res) => {
+  const { name, password } = req.body;
+  console.log(req.body);
+  console.log("Received Data:", { name, password });
+
+  res.json({ message: "Data received successfully", receivedData: { name, password } });
+});
+
+
 // Signup Route
 app.post("/signup", async (req, res) => {
   const { name, email, password } = req.body;
@@ -50,6 +62,7 @@ app.post("/signup", async (req, res) => {
 app.post("/login", async (req, res) => {
   const { email, password } = req.body;
 
+  console.log("Reciever : ", req.body);
   const user = await User.findOne({ email });
   if (!user || !(await bcrypt.compare(password, user.password))) {
     return res.status(400).json({ message: "Invalid credentials" });

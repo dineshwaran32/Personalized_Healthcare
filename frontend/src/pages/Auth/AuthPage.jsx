@@ -16,7 +16,7 @@ const AuthPage = () => {
     const url = isLogin ?  "/login" : "/signup";;
   
     try {
-      const response = await fetch(`http://localhost:3000${url}`, {
+      const response = await fetch(`http://localhost:4000${url}`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData),
