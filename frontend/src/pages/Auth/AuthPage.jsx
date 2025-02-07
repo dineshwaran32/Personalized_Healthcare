@@ -1,8 +1,10 @@
 import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Mail, Lock, User, ArrowRight, Github, Chrome } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
-const AuthPage = () => {
+const AuthPage = ({ setIsAuthenticated }) => {
+  const navigate = useNavigate();
   const [isLogin, setIsLogin] = useState(true);
   const [formData, setFormData] = useState({
     name: "",
@@ -14,7 +16,8 @@ const AuthPage = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     const url = isLogin ?  "/login" : "/signup";;
-  
+
+    console.log("URL : " , url);
     try {
       const response = await fetch(`http://localhost:4000${url}`, {
         method: "POST",
@@ -25,8 +28,11 @@ const AuthPage = () => {
       const data = await response.json();
       if (!response.ok) throw new Error(data.message || "Something went wrong");
   
-      localStorage.setItem("token", data.token);
       console.log("User authenticated:", data.user);
+
+      localStorage.setItem("token", data.token);
+      setIsAuthenticated(true);
+      navigate("/profile");
     } catch (error) {
       console.error(error.message);
     }
