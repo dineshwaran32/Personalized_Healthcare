@@ -43,11 +43,10 @@ app.post("/signup", async (req, res) => {
   res.status(201).json({ message: "User registered successfully" });
 });
 
-// Login Route
 app.post("/login", async (req, res) => {
   const { email, password } = req.body;
 
-  console.log("Reciever : ", req.body);
+  console.log("Receiver : ", req.body);
   const user = await User.findOne({ email });
   if (!user || !(await bcrypt.compare(password, user.password))) {
     return res.status(400).json({ message: "Invalid credentials" });
@@ -55,8 +54,10 @@ app.post("/login", async (req, res) => {
 
   const token = jwt.sign({ id: user._id }, JWT_SECRET, { expiresIn: "1h" });
   console.log(token);
-  res.json({ token });
+
+  res.json({ token, user: { id: user._id, name: user.name, email: user.email } });
 });
+
 
 // Start Server
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));

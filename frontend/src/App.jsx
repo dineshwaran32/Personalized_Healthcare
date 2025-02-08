@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from "react";
-import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
+import React, { useEffect, useState } from "react"; 
+import { BrowserRouter as Router, Routes, Route, Navigate, useLocation } from "react-router-dom";
 import Header from "./components/Header";
 import Hero from "./components/Hero";
 import Features from "./components/Features";
@@ -13,11 +13,16 @@ import AuthPage from "./pages/Auth/AuthPage";
 import LearnMore from "./pages/LearnMore";
 import ReturnToTop from "./components/ReturnToTop";
 import MouseFollower from "./components/MouseFollower";
-import Profile from "./pages/Profile";
+import Profile from "./components/Profile";
+
+function ProtectedRoute({ isAuthenticated, children }) {
+  const location = useLocation();
+  return isAuthenticated ? children : <Navigate to="/auth" state={{ from: location.pathname, message: "Please log in to access this page." }} />;
+}
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [user, setUser] = useState(null); // Store user details
+  const [user, setUser] = useState(null);
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -25,55 +30,63 @@ function App() {
       try {
         const parts = token.split(".");
         if (parts.length !== 3) throw new Error("Invalid token format");
-  
-        const tokenData = JSON.parse(atob(parts[1])); 
+
+        const tokenData = JSON.parse(atob(parts[1]));
         const isExpired = tokenData.exp * 1000 < Date.now();
-  
+
         if (isExpired) {
           localStorage.removeItem("token");
           setIsAuthenticated(false);
+          setUser(null);
         } else {
           setIsAuthenticated(true);
+          setUser({ name: tokenData.name, email: tokenData.email });
         }
       } catch (error) {
         console.error("Token decoding error:", error);
         localStorage.removeItem("token");
         setIsAuthenticated(false);
+        setUser(null);
       }
     }
-  }, [isAuthenticated]); // Added dependency
-  
+  }, []);
 
   return (
     <Router>
       <div className="min-h-screen bg-white">
         <MouseFollower />
-        <Header user={user} isAuthenticated={isAuthenticated} />
-        <Routes>
-          <Route
-            path="/"
-            element={
-              <main>
-                <Hero />
-                <Features />
-                <Testimonials />
-              </main>
-            }
+        <Header user={user} isAuthenticated={isAuthenticated} setIsAuthenticated={setIsAuthenticated} />
+        
+        {/* Show Profile icon only if logged in */}
+        {isAuthenticated && (
+          <Profile
+            user={user}
+            onLogout={() => {
+              localStorage.removeItem("token");
+              setIsAuthenticated(false);
+              setUser(null);
+            }}
           />
-          <Route path="/health-tracking" element={<HealthTracking />} />
-          <Route path="/ai-analysis" element={<AIAnalysis />} />
-          <Route path="/ai-analysis/learn-more" element={<LearnMore />} />
-          <Route path="/expert-care" element={<ExpertCare />} />
-          <Route path="/diet-plans" element={<DietPlans />} />
-          
-          {/* Pass setIsAuthenticated to AuthPage */}
-          <Route path="/auth" element={<AuthPage setIsAuthenticated={setIsAuthenticated} />} />
+        )}
 
+        <Routes>
+          {/* Public Route */}
+          <Route path="/" element={<main><Hero /><Features /><Testimonials /></main>} />
+          <Route path="/auth" element={<AuthPage setIsAuthenticated={setIsAuthenticated} setUser={setUser} />} />
           <Route path="/login" element={<Navigate to="/auth" />} />
-          <Route path="/signup" element={<Navigate to="/auth" state={{ isSignUp: false }} />} />
+          <Route path="/signup" element={<Navigate to="/auth" state={{ isSignUp: true }} />} />
 
-          {/* Protect Profile Page & Pass User Data */}
-          <Route path="/profile" element={isAuthenticated ? <Profile user={user} setIsAuthenticated={setIsAuthenticated} /> : <Navigate to="/auth" />} />
+          {/* Protected Routes */}
+          <Route path="/health-tracking" element={<ProtectedRoute isAuthenticated={isAuthenticated}><HealthTracking /></ProtectedRoute>} />
+          <Route path="/ai-analysis" element={<ProtectedRoute isAuthenticated={isAuthenticated}><AIAnalysis /></ProtectedRoute>} />
+          <Route path="/ai-analysis/learn-more" element={<ProtectedRoute isAuthenticated={isAuthenticated}><LearnMore /></ProtectedRoute>} />
+          <Route path="/expert-care" element={<ProtectedRoute isAuthenticated={isAuthenticated}><ExpertCare /></ProtectedRoute>} />
+          <Route path="/diet-plans" element={<ProtectedRoute isAuthenticated={isAuthenticated}><DietPlans /></ProtectedRoute>} />
+          <Route path="/profile" element={<ProtectedRoute isAuthenticated={isAuthenticated}><Profile user={user} onLogout={() => {
+            localStorage.removeItem("token");
+            setIsAuthenticated(false);
+            setUser(null);
+          }} /></ProtectedRoute>} />
         </Routes>
         <Footer />
         <ReturnToTop />

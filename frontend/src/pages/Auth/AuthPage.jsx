@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Mail, Lock, User, ArrowRight, Github, Chrome } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
-const AuthPage = ({ setIsAuthenticated }) => {
+const AuthPage = ({ setIsAuthenticated, setUser  }) => {
   const navigate = useNavigate();
   const [isLogin, setIsLogin] = useState(true);
   const [formData, setFormData] = useState({
@@ -15,28 +15,39 @@ const AuthPage = ({ setIsAuthenticated }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const url = isLogin ?  "/login" : "/signup";;
-
-    console.log("URL : " , url);
+  
+    if (!isLogin && formData.password !== formData.confirmPassword) {
+      alert("Passwords do not match");
+      return;
+    }
+  
     try {
-      const response = await fetch(`http://localhost:4000${url}`, {
+      const endpoint = isLogin ? "http://localhost:4000/login" : "http://localhost:4000/register";
+      const response = await fetch(endpoint, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData),
       });
   
       const data = await response.json();
-      if (!response.ok) throw new Error(data.message || "Something went wrong");
+  
+      if (!response.ok) {
+        throw new Error(data.message || "Authentication failed");
+      }
   
       console.log("User authenticated:", data.user);
-
       localStorage.setItem("token", data.token);
+      localStorage.setItem("user", JSON.stringify(data.user));
+  
       setIsAuthenticated(true);
-      navigate("/profile");
+      setUser(data.user);
+      navigate("/"); // Redirect after login/signup
+  
     } catch (error) {
-      console.error(error.message);
+      console.error("Auth error:", error.message);
     }
   };
+  
   
 
   const handleChange = (e) => {
@@ -167,35 +178,7 @@ const AuthPage = ({ setIsAuthenticated }) => {
                 <ArrowRight className="ml-2 h-4 w-4" />
               </motion.button>
 
-              <div className="relative my-6">
-                <div className="absolute inset-0 flex items-center">
-                  <div className="w-full border-t border-gray-300"></div>
-                </div>
-                <div className="relative flex justify-center text-sm">
-                  <span className="px-2 bg-white text-gray-500">Or continue with</span>
-                </div>
-              </div>
-
-              <div className="grid grid-cols-2 gap-4">
-                <motion.button
-                  whileHover={{ scale: 1.02 }}
-                  whileTap={{ scale: 0.98 }}
-                  type="button"
-                  className="flex items-center justify-center px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
-                >
-                  <Chrome className="w-5 h-5 mr-2" />
-                  Google
-                </motion.button>
-                <motion.button
-                  whileHover={{ scale: 1.02 }}
-                  whileTap={{ scale: 0.98 }}
-                  type="button"
-                  className="flex items-center justify-center px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
-                >
-                  <Github className="w-5 h-5 mr-2" />
-                  GitHub
-                </motion.button>
-              </div>
+         
             </form>
 
             <p className="mt-8 text-center text-sm text-gray-600">
